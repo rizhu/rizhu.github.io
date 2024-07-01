@@ -28,7 +28,7 @@ Before that, I completed my BS in Electrical Engineering and Computer Science at
 
 I work on the **Automation Team**, where I've worked on alpha development, exchange order entry, reconciliation, dev tools, metrics monitoring, order sizing, and US trading hours oncall.
 
-**Python • C++**
+**Python • C++ • SQL • Docker • K8s**
 
 <p style="text-align:left;">
     <strong><a href="https://voleon.com/">The Voleon Group</a></strong>
