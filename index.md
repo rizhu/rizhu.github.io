@@ -26,9 +26,9 @@ Before that, I completed my BS in Electrical Engineering and Computer Science at
     </i>
 </p>
 
-I work on the **Automation Team**, where I've worked on alpha development, exchange order entry, reconciliation, dev tools, metrics monitoring, order sizing, and US trading hours oncall.
+I work on the  **Automation Team**, where I have a variety of repsonsibilities. My role has spanned production engineering (oncall, trading system configuration, trading metrics collection), DevOps (build, CI/CD), infrastructure/platform engineering (k8s, Airflow, AWS, Terraform), and research engineering (research reconciliation, research productionization).
 
-**Python • C++ • SQL • Docker • K8s**
+**Python • C++ • Linux • SQL • Docker • K8s • Airflow • Prometheus • Terraform • AWS**
 
 <p style="text-align:left;">
     <strong><a href="https://voleon.com/">The Voleon Group</a></strong>
@@ -70,7 +70,7 @@ I worked on the **On-Road Execution Team**, where I developed an internal debugg
 
 ### University of California, Berkeley (08/2019 - 05/2023)
 #### B.S., Electrical Engineering and Computer Sciences - GPA: 3.93/4.0
-#### Technical Coursework
+#### Selected Technical Coursework
 *   **CS 61A** - The Structure and Interpretation of Computer Programs
 *   **CS 61B** - Data Structures
 *   **CS 61C** - Great Ideas in Computer Architecture
@@ -113,6 +113,13 @@ I worked on the **On-Road Execution Team**, where I developed an internal debugg
 
 ## Misc.
 
-I like movies, the Sierras, Jane Austen, and Liverpool Football Club.
+I love backpacking, mountaineering, and the outdoors! Here are some of my recent adventures (solo unless otherwise noted). One day, I'll write proper trip reports.
+
+*   Grand Canyon Rim to Rim to Rim, AZ: 20250215 - 20250217
+*   Mount Russell 14,094' via East Ridge (class 3), CA: 20240914
+*   High Sierra Trail with summits of Mount Whitney 14,505' (class 1) and Mount Muir 14,018' (class 3), CA: 20240901 - 20240905
+*   Mount Shasta 14,180' via Avalanche Gulch (class 2), CA: 20240621
+*   Middle Sister 10,047' via Hayden Glacier (class 2), OR: 20240526
+*   Mount Whitney 14,505' via Mount Whitney Trail (class 2, ice chute), CA: 20230627
 
 * * *
