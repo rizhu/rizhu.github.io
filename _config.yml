@@ -13,6 +13,9 @@ title: Richard Hu
 description: Quantitative Technologist @ Radix Trading
 
 sidebar:
+  - name: Public Lands
+    icon: <i class="fa-solid fa-mountain"></i>
+    link: /public_lands
   - name: Blog
     icon: <i class="fa-solid fa-laptop-code"></i>
     link: /blog
