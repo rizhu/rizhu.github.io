@@ -79,6 +79,9 @@ I worked on the **On-Road Execution Team**, where I developed an internal debugg
 
 I love backpacking, mountaineering, and the outdoors! Here are some of my recent adventures (solo unless otherwise noted). One day, I'll write proper trip reports.
 
+*   Northern Picket Range via Access Creek, Cascades, WA: 2025-07-04 - 2025-07-07
+    * Luna Peak (true summit) 8,311' via Southwest Ridge (class 3)
+
 *   Evolution Basin high country, Sierra Nevada, CA: 2025-06-19 - 2025-06-21
     * The Socialite 12,265' via West Ridge (class 2/3)
 
