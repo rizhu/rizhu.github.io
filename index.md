@@ -90,6 +90,7 @@ I love backpacking, mountaineering, and the outdoors! Here are some of my recent
 *   Mount Russell 14,094' via East Ridge (class 3), Sierra Nevada, CA: 2024-09-14
 
 *   High Sierra Trail, Sierra Nevada, CA: 2024-09-01 - 2024-09-05
+    * My first time backpacking!
     * Mount Whitney 14,505' from John Muir Trail (class 1)
     * Mount Muir 14,018' from John Muir Trail (class 3)
 
