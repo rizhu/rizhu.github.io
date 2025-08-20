@@ -79,6 +79,9 @@ I worked on the **On-Road Execution Team**, where I developed an internal debugg
 
 I love backpacking, mountaineering, and the outdoors! Here are some of my recent adventures (solo unless otherwise noted). One day, I'll write proper trip reports.
 
+*   Skolai Airstrip to Wolverine Airstrip, Wrangell - St Elias National Park & Preserve, AK: 2025-08-09 - 2025-08-15
+    * With circumnavigation of Wolverine Plateau
+
 *   Northern Picket Range via Access Creek, Cascades, WA: 2025-07-04 - 2025-07-07
     * Luna Peak (true summit) 8,311' via Southwest Ridge (class 3)
 
