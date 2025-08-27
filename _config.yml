@@ -1,0 +1,37 @@
+plugins:
+  - jekyll-feed
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+
+remote_theme: BDHU/minimalist
+
+color-scheme: light
+favicon: false
+
+logo: ./assets/logo.jpg
+title: Richard Hu
+description: Quantitative Technologist @ Radix Trading
+
+sidebar:
+  - name: Gallery
+    icon: <i class="fa-solid fa-mountain"></i>
+    link: /gallery
+  - name: Blog
+    icon: <i class="fa-solid fa-laptop-code"></i>
+    link: /blog
+  -
+  - name: LinkedIn
+    icon: <i class="fa-brands fa-linkedin"></i>
+    link: https://www.linkedin.com/in/rhu2001/
+  - name: GitHub
+    icon: <i class="fa-brands fa-github"></i>
+    link: https://github.com/rizhu
+  - name: Resume
+    icon: <i class="fa-solid fa-file-lines"></i>
+    link: https://github.com/rizhu/Resume
+
+collections:
+  roads:
+    output: true
+
+github: [metadata]
