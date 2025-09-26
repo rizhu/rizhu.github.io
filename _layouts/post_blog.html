@@ -1,0 +1,18 @@
+---
+layout: default
+---
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<h2 id="top">{{ page.title }}</h2>
+<h4><em>Posted on {{ page.date | date: "%B %-d, %Y" }}</em></h4>
+
+{{ content }}
+
+<p>
+  <a href="#top">(back to top) ⇱</a>
+</p>
+
+{% if page.tags %}
+<span style="font-size:smaller;">tags: <em>{{ page.tags | join: "</em> - <em>" }}</em></span>
+{% endif %}
