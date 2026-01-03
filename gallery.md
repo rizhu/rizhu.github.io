@@ -33,7 +33,7 @@ I take pictures on all my outdoor adventures! Here are some of my favourites.
 
 ![](/assets/gallery/sierra4.jpg)
 
-<center><em>Polemonium eximinium, Sierra Nevada, CA</em></center>
+<center><em>Polemonium eximium, Sierra Nevada, CA</em></center>
 
 <p></p>
 
