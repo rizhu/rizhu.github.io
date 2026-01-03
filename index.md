@@ -79,6 +79,8 @@ I worked on the **On-Road Execution Team**, where I developed an internal debugg
 
 I love backpacking, mountaineering, and the outdoors! Here are some of my recent adventures (always unguided; solo unless otherwise noted). One day, I'll write proper trip reports.
 
+*   Wild ice skating on South Lake, Sierra Nevada, CA
+
 *   Middle Palisade 14,018' via Northeast Face (class 3) with Jeremy, Sierra Nevada, CA
 
 *   Skolai airstrip to Wolverine airstrip with circumnavigation of Wolverine Plateau, Wrangell - St Elias National Park & Preserve, AK
