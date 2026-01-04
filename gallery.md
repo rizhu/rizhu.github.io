@@ -19,7 +19,7 @@ I take pictures on all my outdoor adventures! Here are some of my favourites.
 
 * * *
 
-![](/assets/gallery/pefo.JPG)
+![](/assets/gallery/pefo.jpg)
 
 <center><em>"Catching Starlight," Painted Desert, AZ</em></center>
 
