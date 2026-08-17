@@ -1,0 +1,453 @@
+<p>
+  Move semantics are a fundamental component of object lifecycle and
+  effective memory management in C++, and writing good C++ code goes hand in
+  hand with understanding move semantics.
+</p>
+
+<p>
+  In this post, I motivate the existence of move semantics and dive into the
+  basic technical details behind moving objects in C++.
+</p>
+
+<nav class="toc" aria-label="Contents">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#why-are-move-semantics-useful">Why Are Move Semantics Useful?</a></li>
+    <li><a href="#value-categories-in-modern-c">Value Categories in Modern C++</a></li>
+    <li><a href="#how-references-actually-work-mostly">How References <em>Actually</em> Work (Mostly)</a></li>
+    <li><a href="#implementing-move-semantics">Implementing Move Semantics</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+</nav>
+
+<h3 id="why-are-move-semantics-useful">Why Are Move Semantics Useful?
+  <a class="anchor" href="#top" aria-label="Back to top">&#8689;</a></h3>
+
+<p>
+  Let&rsquo;s say I was a particularly precocious baby and on my first
+  birthday, I wanted to write some C++ code to fill a
+  <code>vector&lt;int&gt;</code> with a Python-like range of
+  <code>int</code>s. The date would have been October 15th 2002, meaning that
+  the most up-to-date C++ standard would have been C++ 98 and my code might
+  have looked like this:
+</p>
+
+<pre><code>vector&lt;int&gt; range(int start, int end, int increment) {
+  vector&lt;int&gt; res;
+  for (int i = 0; start + i * increment &lt; end; i++)
+          res.push_back(start + i * increment);
+  return res;
+}</code></pre>
+
+<p>Seems fine so far. Now let&rsquo;s try the function out.</p>
+
+<pre><code>vector&lt;int&gt; every_three = range(0, 20, 3);
+cout &lt;&lt; "Some numbers equivalent to 1 mod 3" &lt;&lt; endl;
+# No range-based for loops in C++ 98 :(
+for (int i = 0; i &lt; every_three.size(); i++)
+  cout &lt;&lt; every_three[i] + 1 &lt;&lt; endl;</code></pre>
+
+<p>
+  Something annoying happens here, but can you spot what it is? Let&rsquo;s
+  analyze that very first line.
+</p>
+
+<p>
+  <code>every_three</code> is <em>copy-constructed</em> from the return value
+  of the call to <code>range()</code>. Inside the call to <code>range()</code>,
+  the <code>vector&lt;int&gt; res</code> is created, filled, and returned.
+  Let&rsquo;s assume the compiler is smart and avoids copying
+  <code>res</code> to a temporary variable so before
+  <code>every_three</code>&rsquo;s copy constructor is called, there is already
+  memory allocated for <code>range()</code>&rsquo;s return value.
+</p>
+
+<p>
+  Then, within <code>every_three</code>&rsquo;s copy constructor, <em>memory is
+  allocated again</em> for <code>every_three</code> and all the elements of
+  <code>range()</code>&rsquo;s return value are copied to
+  <code>every_three</code>&rsquo;s memory.
+</p>
+
+<p>
+  Clearly, this is inefficient. We&rsquo;d much rather just <em>move</em> the
+  data from the return value to <code>every_three</code> since the return value
+  isn&rsquo;t going to be used for anything else anyways; it&rsquo;s a
+  temporary variable so the compiler will probably just destroy it right after
+  this line.
+</p>
+
+<p>
+  The C++ Standard Committee recognized the importance of being able to moving
+  objects around and so with C++ 11, <em>move semantics</em> were introduced.
+</p>
+
+<h3 id="value-categories-in-modern-c">Value Categories in Modern C++
+  <a class="anchor" href="#top" aria-label="Back to top">&#8689;</a></h3>
+
+<p>
+  <em>Value categories</em> govern the rules of moving and every expression in
+  C++ (e.g. variable names, literals, function calls, operators with operands)
+  belongs to a value category. Because value categories are associated with the
+  expression itself and not the object that is the result of evaluating the
+  expression, they are known at compile-time.
+</p>
+
+<p>
+  C++ 11 redefined and expanded on the older value categories and the C++
+  reference has
+  <a href="https://en.cppreference.com/w/cpp/language/value_category">a
+  comprehensive page about them</a>, but I think it also helps to have an
+  intuitive understanding of the expressions that belong in each value
+  category.
+</p>
+
+<p>
+  Broadly, expressions in C++ can either have an identity or not have an
+  identity and you are either able or unable to move the result of evaluating
+  an expression. It might not be easy to see why these attributes are
+  orthogonal (shouldn&rsquo;t we only be able to move temporary,
+  identity-less objects that we know we will never use again?) so here is a
+  motivating example. Consider the following class:
+</p>
+
+<pre><code>class A {
+public:
+  A(int size, int value) : v(size, value) { }
+  // ... functions that may modify this-&gt;v
+  vector&lt;int&gt; v;
+};</code></pre>
+
+<p>Let&rsquo;s begin with a simple case.</p>
+
+<pre><code>A a1(5, 1);
+A a2 = a1;</code></pre>
+
+<p>
+  <code>a1</code> has a name and identity and therefore, the compiler should
+  not move it to <code>a2</code> here since it might be used later on. Of
+  course, we should have some way to explicitly tell the compiler we want to
+  move it (perhaps because we know it will never be used again) but since we
+  don&rsquo;t do anything like that here, the compiler should play it safe and
+  copy <code>a1</code> to <code>a2</code>.
+</p>
+
+<pre><code>A a3 = A(5, 1);</code></pre>
+
+<p>
+  <code>A(5, 1)</code>, on the other hand, has no identity. It evaluates to a
+  temporary object that will be destroyed as soon as the line finishes
+  executing so the compiler, ideally, should move it to <code>a3</code> instead
+  of copying it.
+</p>
+
+<pre><code>vector&lt;int&gt; v = A(5, 1).v</code></pre>
+
+<p>
+  <code>A(5, 1).v</code> has an identity because it is named but, clearly, the
+  compiler should still move it since it is a member of a temporary object that
+  will be destroyed soon.
+</p>
+
+<p>
+  Thus, C++ places every expression into a value category based on whether it
+  has an identity and whether the object it evaluates to can be moved. The 3
+  <em>primary categories</em> are lvalues, xvalues, and prvalues and,
+  intuitively, they are defined like so:
+</p>
+
+<img class="diagram" src="/assets/blog/2022-12-21-move_semantics/basic_value_categories.svg"
+     alt="">
+
+<p>
+  The concept of an expression that has no identity but also cannot be moved
+  has no practical use so C++ has no value category for them. Here are the
+  value categories of some of the aforementioned expressions:
+</p>
+
+<pre><code>A a1(5, 1); // a1 is an lvalue.
+A a2 = a1;  // a2 is an lvalue.
+A(5, 1);    // A(5, 1) is a prvalue.
+A(5, 1).v;  // A(5, 1).v is an xvalue</code></pre>
+
+<p>
+  On top of these three basic value categories, C++ also defines 2 more
+  <em>mixed categories</em>&mdash;glvalues and rvalues&mdash;which indicate
+  that an expression has an identity or can be moved, respectively.
+</p>
+
+<img class="diagram" src="/assets/blog/2022-12-21-move_semantics/all_value_categories.svg"
+     alt="">
+
+<p>Finally, the names of the value categories do all have meanings.</p>
+
+<ul class="list">
+  <li>
+    lvalue &mdash; the &lsquo;l&rsquo; stands for &ldquo;left.&rdquo; Prior to
+    C++ 11, lvalues were just expressions with an identity and only lvalues
+    could appear on the left side of the assignment operator <code>=</code>
+  </li>
+  <li>
+    xvalue &mdash; short for &ldquo;eXpiring value&rdquo;. You can think of
+    them as named expressions that are about to be destroyed, so they are fine
+    to move.
+  </li>
+  <li>
+    prvalue &mdash; short for &ldquo;pure rvalue&rdquo;. These are expressions
+    that generally evaluate to nameless, temporary objects (e.g.
+    <code>"hello"</code>, <code>A(5, 1)</code>, or <code>a + b</code>).
+  </li>
+  <li>
+    glvalue &mdash; short for &ldquo;generalized lvalue&rdquo;. Anything with a
+    name falls into here.
+  </li>
+  <li>
+    rvalue &mdash; the &lsquo;r&rsquo; stands for &ldquo;right.&rdquo; Prior to
+    C++ 11, rvalues were just expressions with no identity and they could only
+    appear on the right side of the assignment operator <code>=</code>
+  </li>
+</ul>
+
+<h3 id="how-references-actually-work-mostly">How References <em>Actually</em> Work (Mostly)
+  <a class="anchor" href="#top" aria-label="Back to top">&#8689;</a></h3>
+
+<p>
+  If you took an intro CS course that used C++, you probably thought of
+  references as just a way to &ldquo;refer&rdquo; to another variable and never
+  considered them further. However, references are closely tied to value
+  categories and understanding them is crucial to understanding move semantics.
+</p>
+
+<p>
+  Most of the time, the only value categories we care about are lvalues and
+  rvalues, since rvalues are things that can be moved and lvalues are
+  everything else. As such, in C++, we can bind a reference to either an lvalue
+  or an rvalue with a single ampersand <code>&amp;</code> or a double ampersand
+  <code>&amp;&amp;</code>, respectively.
+</p>
+
+<pre><code>int a = 1;
+int b&amp; = a;     // lvalue reference
+a = 2;          // a == b == 2
+b = 3;          // a == b == 3
+
+int&amp;&amp; c = 1;    // rvalue reference (useless for now)
+
+int&amp; d = 1;     // compiler error: can't bind lvalue reference to rvalue
+int&amp;&amp; e = a;    // compiler error: can't bind rvalue reference to lvalue</code></pre>
+
+<p>
+  Additionally, if we add a <code>const</code> in front of an lvalue reference,
+  <em>the resulting reference will bind to both lvalues and rvalues</em>, since
+  the <code>const</code> modifier prevents the name from being reassigned. The
+  same does not hold for rvalue references though.
+</p>
+
+<pre><code>int a = 1;
+const int&amp; b = a;   // ok!
+const int&amp; c = 1;   // also ok! We can't reassign c anyways.
+
+const int&amp;&amp; d = a;  // compiler error: can't bind rvalue reference to lvalue
+const int&amp;&amp; e = 1;  // ok!</code></pre>
+
+<p>
+  lvalue and rvalue references are powerful because they enable us to achieve
+  polymorphism based on value categories.
+</p>
+
+<pre><code>void f(int&amp; n) { cout &lt;&lt; 1 &lt;&lt; endl; }
+void f(int&amp;&amp; n) { cout &lt;&lt; 2 &lt;&lt; endl; }
+
+int a = 1;
+f(a);   // prints 1 because a is an lvalue
+f(2);   // prints 2 because 2 is an rvalue</code></pre>
+
+<p>
+  Because C++&rsquo;s overload resolution picks the most
+  &ldquo;specific&rdquo; signature for a function call&rsquo;s arguments,
+  behaviour is still predictable when we add <code>const</code> lvalue
+  references into the mix.
+</p>
+
+<pre><code>void f(int&amp; n) { cout &lt;&lt; 1 &lt;&lt; endl; }
+void f(const int&amp; n) { cout &lt;&lt; 2 &lt;&lt; endl; }
+
+int a = 1;
+const int b = 2;
+f(a);   // prints 1 because a is a non-const lvalue
+f(b);   // prints 2 because b is a const lvalue
+f(2);   // prints 2 because 2 is an rvalue</code></pre>
+
+<p>
+  It is important to note that within the scope of the function
+  <code>f</code>, <code>n</code> itself is an lvalue because it has an identity
+  and is not short-lived; it just could be the case that it is bound to an
+  rvalue.
+</p>
+
+<p>
+  With polymorphism alongside lvalue and rvalue references, we can guarantee
+  that function arguments are bound to a particular value category, meaning
+  that we can dictate a function&rsquo;s behaviour based on whether or not its
+  arguments can be moved!
+</p>
+
+<p>
+  One last thing to note: <strong>the double ampersand
+  <code>&amp;&amp;</code> does not always indicate an rvalue
+  reference.</strong> Specifically, if the <code>&amp;&amp;</code> is attached
+  to a template parameter or <code>auto</code>, it means something very
+  different.
+</p>
+
+<pre><code>template&lt;typename T&gt;
+void f(T&amp;&amp;);    // NOT AN RVALUE REFERENCE
+
+const int a = 1;
+auto&amp;&amp; b = a;   // NOT AN RVALUE REFERENCE</code></pre>
+
+<p>
+  Read up on template type deduction and forwarding references to learn more
+  about this important caveat.
+</p>
+
+<h3 id="implementing-move-semantics">Implementing Move Semantics
+  <a class="anchor" href="#top" aria-label="Back to top">&#8689;</a></h3>
+
+<p>
+  C++ 11 introduced two new special member functions: the move constructor and
+  the move assignment operator. Like the other special member functions,
+  default versions are provided if not explicitly defined and you can
+  explicitly request them with <code>= default</code> or disable them with
+  <code>= delete</code>.
+</p>
+
+<pre><code>class A {
+public:
+  ~A();                   // destructor
+
+  A(const A&amp;);            // copy constructor
+  A&amp; operator=(const A&amp;); // copy assignment operator
+
+  A(A&amp;&amp;);             // NEW in C++ 11: move constructor
+  A&amp; operator=(A&amp;&amp;);  // NEW in C++ 11: move assignment operator
+};</code></pre>
+
+<p>
+  We can see that when an object is constructed or assigned from an rvalue
+  reference, the move operations are used if they are available so we can
+  override them to more efficiently handle construction and assignment from
+  objects that we know are okay to move.
+</p>
+
+<pre><code>class A {
+public:
+  // ... other functions
+  A(A&amp;&amp; other) {
+      // Take other's resources
+      this-&gt;arr = other.arr;
+      this-&gt;size = other.size;
+  }
+
+  A&amp; operator=(A&amp;&amp; other) {
+      // Clean up my own resources first
+      delete[] this-&gt;arr;
+
+      // Then, take other's resources
+      this-&gt;arr = other.arr;
+      this-&gt;size = other.size;
+
+      return *this;
+  }
+  int* arr;
+  int size;
+};</code></pre>
+
+<p>
+  In the example <code>A</code> class, the copy operations would have to
+  allocate memory for <code>this-&gt;arr</code> and then copy the contents of
+  <code>other.arr</code> over element-by-element. Clearly, when
+  <code>other</code> is fine to move, we&rsquo;d rather just give its resources
+  to <code>this</code> directly instead of wasting memory by copying them over.
+</p>
+
+<pre><code>A make_A(int);      // some factory function
+
+A a = make_A(3);    // make_A(3) is an rvalue so move constructor is called.
+// ... do some stuff
+a = make_A(7);      // make_A(7) is an rvalue so move assignment operator is called.</code></pre>
+
+<p>
+  Moreover, if we want to explicitly move an object that is an lvalue
+  expression, we can call <code>std::move()</code>.
+</p>
+
+<pre><code>A a1();
+A a2 = move(v1);</code></pre>
+
+<p>
+  <code>std::move()</code> doesn&rsquo;t actually move anything on its own, it
+  just casts its argument to an rvalue reference using a
+  <code>static_cast()</code> and lets overload resolution do the rest. You
+  should always explicitly call <code>std::move()</code> to move an lvalue
+  expression, but also know that most modern compilers are quite intelligent
+  and will try to turn copy operations into move operations whenever possible.
+</p>
+
+<p>
+  Lastly, it may be tempting to define move operations for every user-defined
+  <code>class</code> you write, but you should be wary of making your code
+  needlessly complex. The default move operations already perform a move
+  operation on all of an object&rsquo;s member variables so you should only
+  override the move operations if you desire more specific move semantics. This
+  is one part of the
+  <a href="https://en.cppreference.com/w/cpp/language/rule_of_three#Rule_of_five">rule
+  of five</a>.
+</p>
+
+<h3 id="conclusion">Conclusion
+  <a class="anchor" href="#top" aria-label="Back to top">&#8689;</a></h3>
+
+<p>
+  This post barely scratches the surface of move semantics; there are
+  <a href="https://www.cppmove.com/">entire books</a> dedicated to explaining
+  all of its tiny little details and nuances.
+</p>
+
+<p>
+  The bottom line, though, is that move semantics enable you to elegantly hand
+  off objects and their resources and they are a fundamental tool for
+  optimizing code performance.
+</p>
+
+<p>
+  You don&rsquo;t know C++ until you know about move semantics; but once you
+  have even a basic understanding of them, you can begin to effectively
+  leverage one of C++&rsquo;s most powerful features to create fast, robust,
+  and efficient programs.
+</p>
+
+<h3 id="references">References
+  <a class="anchor" href="#top" aria-label="Back to top">&#8689;</a></h3>
+
+<ol class="list list--tight">
+  <li>Bjarne Stroustrup, <em>A Tour of C++ (Second edition)</em>, 2018</li>
+  <li>Scott Meyers, <em>Effective Modern C++</em>, 2014</li>
+  <li>
+    Anders Schau Knatten,
+    <a href="https://blog.knatten.org/2018/03/09/lvalues-rvalues-glvalues-prvalues-xvalues-help/">lvalues,
+    rvalues, glvalues, prvalues, xvalues, help!</a>, 2018-03-09
+  </li>
+  <li>
+    Alex Allain,
+    <a href="https://www.cprogramming.com/c++11/rvalue-references-and-move-semantics-in-c++11.html">Move
+    semantics and rvalue references in C++11</a>
+  </li>
+  <li>
+    Arthur O&rsquo;Dwyer,
+    <a href="https://quuxplusone.github.io/blog/2022/02/02/look-what-they-need/">&ldquo;Universal
+    reference&rdquo; or &ldquo;forwarding reference&rdquo;?</a>, 2022-02-02
+  </li>
+  <li><a href="https://en.cppreference.com/w/cpp">C++ reference</a></li>
+</ol>

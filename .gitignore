@@ -1,0 +1,30 @@
+# There is very little to ignore here. Do NOT add "vendor/": assets/vendor holds
+# the committed copy of KaTeX that the blog needs to render math, and
+# tools/vendor holds the copy of PyYAML that build.py needs to read content/.
+
+### Python byte cache, created when build.py imports the vendored YAML reader ###
+__pycache__/
+*.pyc
+
+### macOS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+*.icloud
+
+### Editors ###
+.idea/
+*.swp

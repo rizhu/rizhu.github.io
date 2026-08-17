@@ -1,0 +1,73 @@
+# The photography page.
+#
+# To add a photograph:
+#   1. Drop the image file into assets/gallery/
+#   2. Add an entry below, in the position you want it on the page
+#   3. Run ./build.py
+#
+# Only `file`, `title`, and `place` are required. build.py reads the image's
+# dimensions from the file itself, so there is nothing else to look up.
+#
+#   file     file name inside assets/gallery/
+#   title    shown when someone hovers the photograph
+#   place    shown under the title
+#   note     an optional longer caption, shown on hover and in the full-screen view
+#   note_by  who the note is quoting, if anyone
+
+title: Photography
+description: >-
+  Photos from adventures.
+
+intro: >-
+  I take pictures on all my adventures. Here are some of my favourites! You can
+  click any one to full-screen it.
+
+photos:
+  - file: sierra2.JPG
+    title: Evolution Valley
+    place: Sierra Nevada, CA
+
+  - file: wrst.jpeg
+    title: Wrangell–St. Elias
+    place: Alaska
+
+  - file: pefo.jpg
+    title: Catching Starlight
+    place: Painted Desert, AZ
+
+  - file: pickets.png
+    title: Picket Range
+    place: North Cascades National Park, WA
+
+  - file: sierra4.jpg
+    title: "*Polemonium eximium*"
+    place: Sierra Nevada, CA
+    note: >-
+      For one who climbs to the high passes or ventures out upon granite ledges
+      there is a supreme reward, the fragrant cerulean blue flower clusters of
+      the Polemonium.
+    note_by: Francis Farquhar, *History of the Sierra Nevada*
+
+  - file: yellowknife.jpg
+    title: Ice skating under the northern lights
+    place: Yellowknife, NT, Canada
+
+  - file: jotr.JPG
+    title: Joshua Tree
+    place: California
+
+  - file: gc.jpg
+    title: North Rim
+    place: Grand Canyon National Park, AZ
+
+  - file: sierra.jpg
+    title: Hamilton Lake and Valhalla
+    place: Sierra Nevada, CA
+
+  - file: three_sisters.jpg
+    title: Three Sisters Wilderness
+    place: Oregon
+
+  - file: sierra3.JPG
+    title: The Range of Light
+    place: Onion Valley, Sierra Nevada, CA

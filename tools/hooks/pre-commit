@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+#
+# Pre-commit hook: run check.py to verify that generated HTML matches
+# content/ and that all other site invariants hold.
+#
+# Install once after cloning:
+#   ln -sf ../../tools/hooks/pre-commit .git/hooks/pre-commit
+
+set -e
+
+root="$(git rev-parse --show-toplevel)"
+
+exec python3 "$root/check.py"

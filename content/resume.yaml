@@ -1,0 +1,170 @@
+# The landing page: headshot, intro, and resume.
+#
+# Text fields accept a little formatting:
+#   **bold**            [link text](https://example.com)
+#   *italic*            `code`
+# Type real punctuation directly: – — ’ ' · are all fine in this file.
+#
+# Run ./build.py after editing.
+
+title: Richard Hu
+description: >-
+  My personal site.
+
+heading: Richard Hu
+
+intro: >-
+  Quantitative Technologist at [Radix Trading](https://www.radixtrading.com/)
+  in Amsterdam. Sometimes taking photos and making videos too.
+
+# The small row of links under the intro.
+links:
+  - label: LinkedIn
+    url: https://www.linkedin.com/in/rhu2001/
+  - label: GitHub
+    url: https://github.com/rizhu
+  - label: Resume PDF
+    url: https://github.com/rizhu/Resume
+
+# Each section becomes a labelled block on the page, in this order.
+#
+# A section holds either `entries` (jobs, degrees) or `trips` (the adventure
+# list), and may start with `intro` paragraphs.
+#
+# In an entry:
+#   org       organisation name, shown in bold
+#   url       optional link for the organisation
+#   roles     list of {title, dates, location} — one line each under the org
+#   body      one or more paragraphs
+#   bullets   a bulleted list, which may nest
+#   stack     technologies, shown as a small monospace row
+sections:
+  - heading: Experience
+    entries:
+      - org: Radix Trading
+        url: https://www.radixtrading.com/
+        roles:
+          - title: Quantitative Technologist
+            dates: July 2026 – Present
+            location: Amsterdam, Netherlands
+          - title: Quantitative Technologist
+            dates: August 2023 – July 2026
+            location: Chicago, IL
+        body:
+          - >-
+            I work on the **Trading Operations Team**, where I have a variety of
+            responsibilities. My role has spanned production engineering
+            (oncall, trading system configuration, trading metrics collection),
+            DevOps (build, CI/CD), infrastructure and platform engineering (k8s,
+            Airflow, AWS, Terraform), and research engineering (research
+            reconciliation, research productionization).
+        stack:
+          [Python, C++, Linux, Docker, K8s, Airflow, Prometheus, Terraform, AWS]
+
+      - org: The Voleon Group
+        url: https://voleon.com/
+        roles:
+          - title: Software Engineer Intern
+            dates: May 2022 – August 2022
+            location: Berkeley, CA
+        body:
+          - >-
+            I worked on the **Infrastructure Engineering Team**, where I
+            developed APIs and created a dashboard to collect test metrics and
+            identify flaky tests. I also profiled and analyzed Airflow DAGs to
+            search for sources of slowdown in production jobs.
+        stack: [Python, Docker, Groovy, Elasticsearch, Kibana, Airflow]
+
+      - org: Amazon
+        url: https://www.amazon.com/
+        roles:
+          - title: Software Development Engineer Intern
+            dates: May 2021 – August 2021
+            location: Bellevue, WA
+        body:
+          - >-
+            I worked on the **On-Road Execution Team**, where I developed an
+            internal debugging tool to rapidly retrieve transporter itineraries
+            by transporter ID and time stamp.
+        stack: [Java, TypeScript, AWS S3, AWS Glue, AWS Kinesis, AWS CDK]
+
+  - heading: Education
+    entries:
+      - org: University of California, Berkeley
+        roles:
+          - title: B.S., Electrical Engineering and Computer Sciences · GPA 3.93/4.0
+            dates: August 2019 – May 2023
+        bullets:
+          - "**Honors:** Dean’s List; EECS Honor Society; Eta Kappa Nu (HKN)
+            Honor Society"
+          - text: "**Teaching:** CS 70 — Discrete Mathematics and Probability
+              Theory ([Sp23](https://sp23.eecs70.org/),
+              [Fa22](http://www.fa22.eecs70.org/),
+              [Sp22](http://www.sp22.eecs70.org/),
+              [Fa21](http://www.fa21.eecs70.org/),
+              [Sp21](http://www.sp21.eecs70.org/),
+              [Fa20](http://www.fa20.eecs70.org/),
+              [Su20](http://www.su20.eecs70.org/))"
+            bullets:
+              - "[Outstanding Graduate Student Instructor Award](https://gsi.berkeley.edu/programs-services/award-programs/ogsi/ogsi-2021/)
+                (2020–2021)"
+
+  - heading: Outdoors
+    intro:
+      - >-
+        I love backpacking, mountaineering, and the outdoors! Here are some
+        selected adventures.
+    trips:
+      - what: Brooks Range custom route (7 days)
+        where: Gates of the Arctic National Park and Preserve, AK
+        party: solo
+
+      - what: >-
+          Twentyfive Mile Wash, Escalante River, and Scorpion
+          Gulch (class 3)
+        where: Grand Staircase–Escalante National Monument, UT
+
+      - what: Syncline Valley, Walker Cabin, Taylor Canyon
+        where: Canyonlands National Park, UT
+
+      - what: Painted Desert
+        where: Petrified Forest National Park, AZ
+
+      - what: Middle Palisade 14,018' via Northeast Face (class 3)
+        where: Sierra Nevada, CA
+
+      - what: >-
+          Skolai to Wolverine, with circumnavigation of the
+          Wolverine Plateau
+        where: Wrangell–St. Elias National Park & Preserve, AK
+        party: solo
+
+      - what: >-
+          Northern Picket Range via Access Creek, Luna Peak 8,311'
+          (true summit) via Southwest Ridge (class 3)
+        where: North Cascades National Park, WA
+        party: solo
+
+      - what: >-
+          Evolution Basin high country, The Socialite 12,265' via West
+          Ridge (class 3)
+        where: Sierra Nevada, CA
+        party: solo
+
+      - what: Mount Russell 14,094' via East Ridge (class 3)
+        where: Sierra Nevada, CA
+        party: solo
+
+      - what: >-
+          High Sierra Trail, Mount
+          Whitney 14,505' (class 1), Mount Muir 14,018' (class 3) via
+          John Muir Trail
+        where: Sierra Nevada, CA
+        party: solo, my first time backpacking!
+
+      - what: Mount Shasta 14,180' via Avalanche Gulch (class 2)
+        where: Shasta–Trinity National Forest, CA
+        party: solo
+
+      - what: Mount Whitney 14,505' via Mount Whitney Trail (class 2, ice chute)
+        where: Sierra Nevada, CA

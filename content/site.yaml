@@ -1,0 +1,50 @@
+# Site-wide settings.
+#
+# After editing ANY file in content/, run:
+#
+#     ./build.py
+#
+# That regenerates the HTML pages. Commit both your content change and the
+# regenerated HTML.
+
+name: Richard Hu
+domain: https://richardhu.org
+
+# Shown when someone shares a link to the site. Keep it under ~160 characters.
+description: >-
+  Richard Hu — Quantitative Technologist at Radix Trading in Amsterdam.
+  Resume, photography, and writing.
+
+# The headshot on the landing page. To change it, either drop a new file at this
+# path or point this at a different file in assets/.
+logo: /assets/logo.jpg
+
+# The tabs across the top of every page, in order.
+#
+# To add a tab, add an entry here and create the matching page. If the page is
+# driven by a content file, add it to `pages` below too; if it is a one-off,
+# create content/<name>.html and add it as `kind: html`.
+tabs:
+  - label: Resume
+    url: /
+  - label: Photography
+    url: /photography/
+  - label: Blog
+    url: /blog/
+
+# Which page each content file becomes.
+pages:
+  - content: resume.yaml
+    kind: resume
+    output: index.html
+    url: /
+  - content: photos.yaml
+    kind: photos
+    output: photography/index.html
+    url: /photography/
+  - content: posts.yaml
+    kind: posts
+    output: blog/index.html
+    url: /blog/
+
+footer: © Richard Hu 2026

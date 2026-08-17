@@ -1,0 +1,63 @@
+# The blog.
+#
+# To add a post:
+#   1. Write the body as HTML in content/posts/<slug>.html — just the article
+#      itself, no <head> or navigation. Copy an existing one for the house style.
+#   2. Add an entry below. Order does not matter; posts are sorted newest first.
+#   3. Run ./build.py, which creates /blog/<slug>/ and lists it on this page.
+#
+#   slug         the URL, so the post lives at /blog/<slug>/
+#   date         YYYY-MM-DD
+#   summary      the blurb on the blog index
+#   description  the blurb search engines and link previews show
+#   math         set to true if the body contains LaTeX; loads the local copy of
+#                KaTeX so \( ... \) and $$ ... $$ render
+#   image        picture used in link previews
+
+title: Blog
+description: >-
+  Random thoughts.
+
+intro: Occasional posts about interesting stuff that pops into my head.
+
+posts:
+  - slug: randomized-svd
+    title: How to Almost Find the SVD of a Matrix Really Fast
+    date: 2022-12-25
+    math: true
+    image: /assets/blog/2022-12-25-randomized_svd/picture.png
+    description: >-
+      Randomized SVD, following Halko, Martinsson, and Tropp: how throwing
+      random vectors at a matrix yields a low-rank approximation an order of
+      magnitude faster than the deterministic SVD.
+    summary: >-
+      The singular value decomposition has applications in compression, signal
+      processing, natural language processing, quantum information, big data,
+      numerical weather prediction, financial engineering, gravitational
+      waveform modeling, disease surveillance, and recommender systems, to name
+      just a few. It is also expensive — unless you are willing to accept an
+      answer that is wrong.
+    tags:
+      - randomized SVD
+      - numerical linear algebra
+      - halko
+
+  - slug: move-semantics
+    title: You Don’t Know C++ Until You Know About Move Semantics
+    date: 2022-12-21
+    description: >-
+      Move semantics are a fundamental component of object lifecycle and
+      effective memory management in C++. A tour of value categories,
+      references, and the move operations.
+    summary: >-
+      Move semantics are a fundamental component of object lifecycle and
+      effective memory management in C++, and writing good C++ code goes hand in
+      hand with understanding them. I motivate their existence and dig into the
+      technical details behind moving objects.
+    tags:
+      - C++
+      - move semantics
+      - value categories
+      - lvalue references
+      - rvalue references
+      - std::move
