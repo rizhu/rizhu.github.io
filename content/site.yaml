@@ -13,7 +13,7 @@ domain: https://richardhu.org
 # Shown when someone shares a link to the site. Keep it under ~160 characters.
 description: >-
   Richard Hu — Quantitative Technologist at Radix Trading in Amsterdam.
-  Resume, photography, and writing.
+  About me, photography, and writing.
 
 # The headshot on the landing page. To change it, either drop a new file at this
 # path or point this at a different file in assets/.
@@ -25,7 +25,7 @@ logo: /assets/logo.jpg
 # driven by a content file, add it to `pages` below too; if it is a one-off,
 # create content/<name>.html and add it as `kind: html`.
 tabs:
-  - label: Resume
+  - label: About Me
     url: /
   - label: Photography
     url: /photography/
@@ -34,8 +34,8 @@ tabs:
 
 # Which page each content file becomes.
 pages:
-  - content: resume.yaml
-    kind: resume
+  - content: about-me.yaml
+    kind: about-me
     output: index.html
     url: /
   - content: photos.yaml

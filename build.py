@@ -273,7 +273,7 @@ def page(*, title, description, url, body, current_url=None,
 
 
 # --------------------------------------------------------------------------- #
-# Resume page
+# About Me page
 # --------------------------------------------------------------------------- #
 
 def render_entry(entry):
@@ -348,7 +348,7 @@ def render_trips(trips, indent=4):
     return "\n".join(out)
 
 
-def build_resume(data, url):
+def build_about_me(data, url):
     body = ['  <div class="hero">']
     body.append('    <img class="hero__portrait" src="%s" width="132" height="132"'
                 % SITE["logo"])
@@ -658,7 +658,7 @@ def load(name):
 
 
 BUILDERS = {
-    "resume": build_resume,
+    "about-me": build_about_me,
     "photos": build_photos,
     "posts": build_posts_index,
 }

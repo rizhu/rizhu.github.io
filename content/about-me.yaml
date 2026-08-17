@@ -1,4 +1,4 @@
-# The landing page: headshot, intro, and resume.
+# The landing page: headshot, intro, and experience.
 #
 # Text fields accept a little formatting:
 #   **bold**            [link text](https://example.com)
@@ -52,12 +52,12 @@ sections:
             location: Chicago, IL
         body:
           - >-
-            I work on the **Trading Operations Team**, where I have a variety of
-            responsibilities. My role has spanned production engineering
-            (oncall, trading system configuration, trading metrics collection),
-            DevOps (build, CI/CD), infrastructure and platform engineering (k8s,
-            Airflow, AWS, Terraform), and research engineering (research
-            reconciliation, research productionization).
+            Currently, I am a **Platform/Infrastructure Engineer** where I 
+            work on building out and scaling our internal infrastructure 
+            and compute. In the past, I worked on production engineering
+            (US trading hours oncall, trading system configuration,
+            trading metrics collection), DevOps (build, CI/CD), and research
+            engineering (research reconciliation, research productionization).
         stack:
           [Python, C++, Linux, Docker, K8s, Airflow, Prometheus, Terraform, AWS]
 

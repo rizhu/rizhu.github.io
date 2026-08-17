@@ -49,7 +49,7 @@ Do not break these. They are the point of how this site is built.
 
 `build.py` reads `content/site.yaml`, which lists `pages`: each entry names a
 content file, a `kind`, and an output path. `kind` selects a builder function
-(`resume`, `photos`, `posts`). Every page goes through the single `page()`
+(`about-me`, `photos`, `posts`). Every page goes through the single `page()`
 function, which owns the `<head>`, the header, the nav, and the footer — so
 shared chrome is defined in exactly one place.
 

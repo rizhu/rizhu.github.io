@@ -1,11 +1,11 @@
 # richardhu.org
 
-My personal site: a resume and a photography portfolio, plus occasional writing.
+My personal site: about me, a photography portfolio, and occasional writing.
 
 **You edit YAML in `content/`. You never edit HTML.**
 
 ```bash
-vim content/photos.yaml     # or resume.yaml, site.yaml, posts.yaml
+vim content/photos.yaml     # or about-me.yaml, site.yaml, posts.yaml
 ./build.py                  # regenerate the pages
 ./serve.sh                  # look at it: http://localhost:4000
 ./check.py                  # sanity check before pushing
@@ -56,9 +56,9 @@ You do not need to look up the image's dimensions — `build.py` reads them out 
 the file. Photographs are shown three per row, cropped to a 4:3 window; hovering
 one darkens it and reveals the title.
 
-### Update the resume
+### Update the about page
 
-Edit `content/resume.yaml`. One job is one block:
+Edit `content/about-me.yaml`. One job is one block:
 
 ```yaml
       - org: Some Company
@@ -85,7 +85,7 @@ In `content/site.yaml`, add to `tabs`:
 
 ```yaml
 tabs:
-  - label: Resume
+  - label: About Me
     url: /
   - label: Photography
     url: /photography/
@@ -167,7 +167,7 @@ wrong and suggests the file you probably meant.
 ```
 content/                 EVERYTHING YOU EDIT
   site.yaml              name, domain, nav tabs, headshot, redirects
-  resume.yaml            the landing page
+  about-me.yaml          the landing page
   photos.yaml            the photography page
   posts.yaml             blog post list
   posts/*.html           blog post bodies
