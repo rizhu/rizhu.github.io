@@ -23,21 +23,37 @@ intro: >-
   click any one to full-screen it.
 
 photos:
-  - file: sierra2.JPG
-    title: Evolution Valley
+  - file: sierra5.jpg
+    title: The Range of Light
     place: Sierra Nevada, CA
+    note: >-
+      [I]t still seems above all others the range of light, the most divinely 
+      beautiful of all the mountain chains I have ever seen.
+    note_by: John Muir, *The Mountains of California*
 
-  - file: wrst.jpeg
-    title: Wrangell–St. Elias
-    place: Alaska
+  - file: brooks1.jpg
+    title: Noatak River
+    place: Brooks Range, AK
+    note: >-
+      The sheer stupendousness of the wilderness gives it a quality of intangibility
+      which is unknown in ordinary manifestations of ocular beauty.
+    note_by: Bob Marshall, *The Problem of the Wilderness*
 
   - file: pefo.jpg
     title: Catching Starlight
     place: Painted Desert, AZ
 
+  - file: wrst.jpeg
+    title: Wrangell–St. Elias
+    place: Alaska
+
   - file: pickets.png
     title: Picket Range
     place: North Cascades National Park, WA
+
+  - file: brooks2.jpg
+    title: Brooks Range
+    place: Brooks Range, AK
 
   - file: sierra4.jpg
     title: "*Polemonium eximium*"
@@ -47,6 +63,10 @@ photos:
       there is a supreme reward, the fragrant cerulean blue flower clusters of
       the Polemonium.
     note_by: Francis Farquhar, *History of the Sierra Nevada*
+
+  - file: cany.jpg
+    title: Canyonlands National Park
+    place: Utah
 
   - file: yellowknife.jpg
     title: Ice skating under the northern lights
@@ -69,5 +89,5 @@ photos:
     place: Oregon
 
   - file: sierra3.JPG
-    title: The Range of Light
-    place: Onion Valley, Sierra Nevada, CA
+    title: Onion Valley
+    place: Sierra Nevada, CA
