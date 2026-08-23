@@ -47,6 +47,10 @@ photos:
     title: Wrangell–St. Elias
     place: Alaska
 
+  - file: cany.jpg
+    title: Canyonlands National Park
+    place: Utah
+
   - file: pickets.png
     title: Picket Range
     place: North Cascades National Park, WA
@@ -63,10 +67,6 @@ photos:
       there is a supreme reward, the fragrant cerulean blue flower clusters of
       the Polemonium.
     note_by: Francis Farquhar, *History of the Sierra Nevada*
-
-  - file: cany.jpg
-    title: Canyonlands National Park
-    place: Utah
 
   - file: yellowknife.jpg
     title: Ice skating under the northern lights
