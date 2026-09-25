@@ -21,8 +21,8 @@ generated output — never edit them by hand.** Change the YAML, then run
 Do not break these. They are the point of how this site is built.
 
 1. **Never edit generated HTML.** `index.html`, `photography/index.html`,
-   `blog/*/index.html`, `404.html`, `sitemap.xml`, and the redirect stubs all
-   come from `content/`. Your change will be silently overwritten. The only
+ `blog/*/index.html`, `flashcards/index.html`, `404.html`, `sitemap.xml`, and
+ the redirect stubs all come from `content/`. Your change will be silently overwritten. The only
    hand-written HTML is `content/posts/*.html` (post bodies).
 2. **Never introduce a build dependency.** No npm, no `package.json`, no pip
    install, no bundler, no Jekyll, no framework, no CSS preprocessor. `build.py`
@@ -49,7 +49,7 @@ Do not break these. They are the point of how this site is built.
 
 `build.py` reads `content/site.yaml`, which lists `pages`: each entry names a
 content file, a `kind`, and an output path. `kind` selects a builder function
-(`about-me`, `photos`, `posts`). Every page goes through the single `page()`
+(`about-me`, `photos`, `posts`, `flashcards`). Every page goes through the single `page()`
 function, which owns the `<head>`, the header, the nav, and the footer — so
 shared chrome is defined in exactly one place.
 
@@ -113,6 +113,25 @@ as `\( x^2 \)` and display math as `$$ x^2 $$`. Inside math, write `&` as
 node -e 'const k=require("./assets/vendor/katex/katex.min.js");
          k.renderToString("\\frac{1}{2}", {throwOnError:true}); console.log("ok")'
 ```
+
+## Recipe: add or edit Dutch flashcards
+
+Sets are `content/flashcards/<set_name>.csv`, one `dutch,english` card per line,
+parsed with Python's `csv` module (quote a side that contains a comma). Blank
+lines and `#` lines are skipped; a first line of `Dutch,English` is treated as a
+header. The file name becomes the set name. `build.py` embeds every set as JSON
+in `flashcards/index.html`, one card per line, so run `./build.py` after any CSV
+edit.
+
+`assets/js/flashcards.js` runs the drill. The selected cards are shuffled once;
+each round serves that order, a miss is re-inserted 3–6 cards later, and the
+round ends when every card has been answered correctly, after which the same
+order repeats. Answers match after trimming and lowercasing (curly apostrophes
+from phone keyboards are folded to straight ones). Set and direction choices are
+stored in `localStorage` under `flashcards.*`.
+
+On phones the site header is not sticky on this page, so the card and the open
+keyboard get the whole screen.
 
 ## Recipe: add a nav tab or a new page
 

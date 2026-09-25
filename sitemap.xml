@@ -21,4 +21,8 @@
     <loc>https://richardhu.org/blog/move-semantics/</loc>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://richardhu.org/flashcards/</loc>
+    <priority>0.8</priority>
+  </url>
 </urlset>

@@ -13,6 +13,8 @@ Only the Python standard library is used, plus the copy of PyYAML committed at
 tools/vendor/. There is nothing to install.
 """
 
+import csv
+import json
 import os
 import re
 import struct
@@ -587,6 +589,170 @@ def build_post(post, blog_url):
 
 
 # --------------------------------------------------------------------------- #
+# Dutch flashcards
+# --------------------------------------------------------------------------- #
+
+def load_card_sets(folder):
+    """Read every <set>.csv in content/<folder>/, one "dutch,english" per line."""
+    directory = os.path.join(CONTENT, folder)
+    if not os.path.isdir(directory):
+        fail("content/flashcards.yaml says the cards live in content/%s/, "
+             "but that folder does not exist." % folder)
+
+    sets = []
+    for filename in sorted(os.listdir(directory)):
+        stem, extension = os.path.splitext(filename)
+        if extension.lower() != ".csv":
+            continue
+        where = "content/%s/%s" % (folder, filename)
+
+        cards = []
+        with open(os.path.join(directory, filename), encoding="utf-8-sig",
+                  newline="") as handle:
+            for number, row in enumerate(csv.reader(handle), start=1):
+                cells = [" ".join(cell.split()) for cell in row]
+                if not any(cells) or cells[0].startswith("#"):
+                    continue
+                if number == 1 and [c.lower() for c in cells] == ["dutch", "english"]:
+                    continue
+                if len(cells) != 2:
+                    fail("%s, line %d has %d parts separated by commas, but a card "
+                         "has exactly two:\n\n    %s\n\nIf one side contains a "
+                         "comma, wrap that side in double quotes:\n\n"
+                         '    "ja, hoor",sure'
+                         % (where, number, len(cells), ",".join(row)))
+                if not cells[0] or not cells[1]:
+                    fail("%s, line %d is missing its %s side:\n\n    %s"
+                         % (where, number, "Dutch" if not cells[0] else "English",
+                            ",".join(row)))
+                cards.append(cells)
+
+        if not cards:
+            fail("%s has no cards. Add one per line, Dutch first:\n\n"
+                 "    de kat,cat" % where)
+
+        name = " ".join(stem.replace("_", " ").replace("-", " ").split())
+        sets.append({"id": stem, "name": name[:1].upper() + name[1:],
+                     "cards": cards})
+
+    if not sets:
+        fail("There are no flashcard sets in content/%s/. Add a file such as "
+             "content/%s/animals.csv\nwith one card per line, Dutch first:\n\n"
+             "    de kat,cat" % (folder, folder))
+    return sets
+
+
+def script_json(value):
+    """JSON that is safe inside <script>: no "<" can close the element early."""
+    return json.dumps(value, ensure_ascii=False).replace("<", "\\u003c")
+
+
+def build_flashcards(data, url):
+    sets = load_card_sets(need(data, "cards", "content/flashcards.yaml"))
+    total = sum(len(s["cards"]) for s in sets)
+
+    body = ["  <h1>%s</h1>" % esc(data["title"])]
+    body.append('  <p class="page-intro">')
+    body.append(wrap(inline(data["intro"]), 4))
+    body.append("  </p>")
+    body.append("")
+    body.append('  <div class="fc" id="flashcards">')
+    body.append('    <details class="fc-options" id="fc-options">')
+    body.append('      <summary class="fc-options__summary">')
+    body.append('        <span class="fc-options__label">Options</span>')
+    body.append('        <span class="fc-options__value" id="fc-summary">'
+                '%d sets &middot; %d cards</span>' % (len(sets), total))
+    body.append("      </summary>")
+    body.append('      <div class="fc-options__body">')
+    body.append('        <fieldset class="fc-field">')
+    body.append("          <legend>Sets</legend>")
+    body.append("          <!-- Generated from content/%s/*.csv -->" % data["cards"])
+    body.append('          <ul class="fc-sets">')
+    for card_set in sets:
+        body.append('            <li><label class="fc-set"><input type="checkbox" '
+                    'name="set" value="%s" checked> <span class="fc-set__name">%s'
+                    '</span> <span class="fc-set__count">%d</span></label></li>'
+                    % (esc(card_set["id"]), esc(card_set["name"]),
+                       len(card_set["cards"])))
+    body.append("          </ul>")
+    body.append('          <p class="fc-quick">')
+    body.append('            <button class="fc-link" type="button" '
+                'data-select="all">Select all</button>')
+    body.append('            <button class="fc-link" type="button" '
+                'data-select="none">Select none</button>')
+    body.append("          </p>")
+    body.append("        </fieldset>")
+    body.append('        <fieldset class="fc-field">')
+    body.append("          <legend>Direction</legend>")
+    body.append('          <div class="fc-segment">')
+    for value, label in (("mixed", "Mixed"), ("nl", "NL &rarr; EN"),
+                         ("en", "EN &rarr; NL")):
+        checked = " checked" if value == "mixed" else ""
+        body.append('            <label><input type="radio" name="direction" '
+                    'value="%s"%s><span>%s</span></label>' % (value, checked, label))
+    body.append("          </div>")
+    body.append("        </fieldset>")
+    body.append("      </div>")
+    body.append("    </details>")
+    body.append("")
+    body.append('    <form class="fc-card" id="fc-card" autocomplete="off" hidden>')
+    body.append('      <p class="fc-card__meta">')
+    body.append('        <span id="fc-direction"></span>')
+    body.append('        <span id="fc-set"></span>')
+    body.append("      </p>")
+    body.append('      <p class="fc-card__prompt" id="fc-prompt"></p>')
+    body.append('      <input class="fc-card__input" id="fc-answer" type="text" '
+                'aria-label="Your answer"')
+    body.append('             autocomplete="off" autocorrect="off" '
+                'autocapitalize="none" spellcheck="false"')
+    body.append('             enterkeyhint="go">')
+    body.append('      <p class="fc-card__feedback" id="fc-feedback" '
+                'aria-live="polite"></p>')
+    body.append('      <div class="fc-card__actions">')
+    body.append('        <button class="fc-btn fc-btn--primary" type="submit" '
+                'id="fc-submit">Check</button>')
+    body.append('        <button class="fc-btn" type="button" id="fc-alt">'
+                'Don&rsquo;t know</button>')
+    body.append("      </div>")
+    body.append("    </form>")
+    body.append('    <p class="fc-empty" id="fc-empty" hidden>'
+                "Pick at least one set under Options.</p>")
+    body.append("")
+    body.append('    <div class="fc-progress" id="fc-progress" hidden>')
+    body.append('      <div class="fc-progress__track"><span class="fc-progress__fill" '
+                'id="fc-bar"></span></div>')
+    body.append('      <p class="fc-progress__text"><span id="fc-round"></span>'
+                '<span id="fc-count"></span></p>')
+    body.append("    </div>")
+    body.append("")
+    body.append('    <noscript><p class="fc-empty">The flashcards need JavaScript '
+                "turned on.</p></noscript>")
+    body.append("  </div>")
+    body.append("")
+
+    # One card per line, so adding a card to a .csv is a one-line diff here too.
+    body.append('  <script type="application/json" id="flashcard-data">')
+    body.append('{"sets": [')
+    for position, card_set in enumerate(sets):
+        body.append('  {"id": %s, "name": %s, "cards": ['
+                    % (script_json(card_set["id"]), script_json(card_set["name"])))
+        body.append(",\n".join("    [%s, %s]" % (script_json(dutch), script_json(english))
+                               for dutch, english in card_set["cards"]))
+        body.append("  ]}" + ("," if position < len(sets) - 1 else ""))
+    body.append("]}")
+    body.append("  </script>")
+
+    return page(
+        title="%s &mdash; %s" % (data["title"], SITE["name"]),
+        description=data["description"],
+        url=url,
+        body="\n".join(body),
+        wrap_class="wrap wrap--flashcards",
+        scripts='<script src="/assets/js/flashcards.js" defer></script>',
+    )
+
+
+# --------------------------------------------------------------------------- #
 # Not-found page, redirects, sitemap
 # --------------------------------------------------------------------------- #
 
@@ -661,6 +827,7 @@ BUILDERS = {
     "about-me": build_about_me,
     "photos": build_photos,
     "posts": build_posts_index,
+    "flashcards": build_flashcards,
 }
 
 

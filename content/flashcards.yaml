@@ -1,0 +1,27 @@
+# The Dutch flashcards page.
+#
+# The cards themselves live in content/flashcards/, one file per set:
+#
+#   content/flashcards/<set_name>.csv
+#
+# with one card per line, Dutch first:
+#
+#   de kat,cat
+#   goedemorgen,good morning
+#
+# To add a set, drop a new .csv file in that folder and run ./build.py. The file
+# name becomes the set's name on the page (food_and_drink.csv -> "Food and
+# drink"). Blank lines and lines starting with # are ignored. If either side
+# contains a comma, wrap that side in double quotes: "ja, hoor",sure.
+#
+#   cards   folder inside content/ that holds the .csv sets
+
+title: Dutch Flashcards
+description: >-
+  Typed-answer flashcards for learning Dutch.
+
+intro: >-
+  Type the other side of each card. Misses come back a few cards later; once
+  every card is right, the round starts over.
+
+cards: flashcards

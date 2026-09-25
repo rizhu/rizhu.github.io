@@ -169,10 +169,10 @@ def check_build_is_current():
         text=True,
     )
     if result.returncode != 0:
+        output = (result.stdout + result.stderr).strip()
         problems.append(
             "the generated HTML is out of date with content/ — run ./build.py\n"
-            + "\n".join("      " + line
-                        for line in result.stdout.strip().split("\n"))
+            + "\n".join("      " + line for line in output.split("\n"))
         )
 
 

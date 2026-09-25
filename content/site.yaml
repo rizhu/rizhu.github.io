@@ -31,6 +31,8 @@ tabs:
     url: /photography/
   - label: Blog
     url: /blog/
+  - label: Flashcards
+    url: /flashcards/
 
 # Which page each content file becomes.
 pages:
@@ -46,5 +48,9 @@ pages:
     kind: posts
     output: blog/index.html
     url: /blog/
+  - content: flashcards.yaml
+    kind: flashcards
+    output: flashcards/index.html
+    url: /flashcards/
 
 footer: © Richard Hu 2026

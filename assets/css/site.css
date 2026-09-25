@@ -159,6 +159,7 @@ body {
   color: var(--ink-55);
   text-decoration: none;
   padding: 0.35rem 0;
+  white-space: nowrap;
 }
 
 .nav a::after {
@@ -231,40 +232,34 @@ body {
   display: block;
 }
 
-/* The wordmark plus three tabs must fit a 320px-wide phone without forcing
-   the page to scroll sideways, so both shrink together. */
+/* Four tabs do not fit beside the wordmark on a phone, so the tabs drop to a
+   full-width row of their own under the wordmark and the theme toggle. They
+   must still fit a 320px-wide phone without the page scrolling sideways. */
+@media (max-width: 38rem) {
+  .site-header__inner {
+    flex-wrap: wrap;
+    height: auto;
+    padding-top: 0.6rem;
+    padding-bottom: 0.3rem;
+    row-gap: 0.2rem;
+  }
+
+  .nav {
+    order: 1;
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+}
+
 @media (max-width: 30rem) {
   :root {
     --gutter: 1.15rem;
   }
 
-  .site-header__inner {
-    height: 3.5rem;
-    gap: 0.75rem;
-  }
-
-  .wordmark {
-    font-size: 0.95rem;
-  }
-
-  .nav {
-    gap: 0.9rem;
-  }
-
   .nav a {
     font-size: 0.7rem;
     letter-spacing: 0.05em;
-  }
-}
-
-@media (max-width: 22rem) {
-  .wordmark {
-    display: none;
-  }
-
-  .nav {
-    width: 100%;
-    justify-content: space-between;
   }
 }
 
@@ -1065,6 +1060,419 @@ pre code {
   overflow-x: auto;
   overflow-y: hidden;
   padding: 0.5rem 0;
+}
+
+/* -------------------------------------------------------------- flashcards */
+
+[hidden] {
+  display: none !important;
+}
+
+/* On a phone the open keyboard leaves little room, so the header scrolls away
+   instead of sticking, and the page starts higher. */
+@media (max-width: 38rem) {
+  body:has(.wrap--flashcards) .site-header {
+    position: static;
+  }
+
+  html:has(.wrap--flashcards) {
+    scroll-padding-top: 0.75rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  .wrap--flashcards {
+    padding-top: 2rem;
+  }
+}
+
+.fc {
+  margin-top: 2rem;
+}
+
+/* Options: one collapsed row until opened, so the card stays near the top. */
+.fc-options {
+  border-top: 1px solid var(--ink-12);
+  border-bottom: 1px solid var(--ink-12);
+}
+
+.fc-options__summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.fc-options__summary::-webkit-details-marker {
+  display: none;
+}
+
+.fc-options__summary::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin: 0 0.2rem 0.2rem 0;
+  border-right: 1.5px solid var(--ink-55);
+  border-bottom: 1.5px solid var(--ink-55);
+  transform: rotate(45deg);
+  transition: transform 200ms ease;
+}
+
+.fc-options[open] .fc-options__summary::after {
+  margin-bottom: 0;
+  margin-top: 0.2rem;
+  transform: rotate(-135deg);
+}
+
+.fc-options__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.fc-options__value {
+  min-width: 0;
+  margin-left: auto;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-55);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.fc-options__body {
+  padding: 0.25rem 0 1.5rem;
+}
+
+.fc-field {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.fc-field + .fc-field {
+  margin-top: 1.25rem;
+}
+
+.fc-field legend {
+  padding: 0;
+  margin-bottom: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-55);
+}
+
+.fc-sets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 0 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fc-set {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 2.75rem;
+  border-bottom: 1px solid var(--ink-06);
+  cursor: pointer;
+}
+
+.fc-set input {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0;
+  accent-color: var(--polemonium);
+}
+
+.fc-set__count {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-55);
+}
+
+.fc-quick {
+  display: flex;
+  gap: 1.25rem;
+  margin: 0.6rem 0 0;
+}
+
+.fc-link {
+  padding: 0.35rem 0;
+  border: 0;
+  background: none;
+  color: var(--ink-55);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.fc-link:hover {
+  color: var(--ink);
+}
+
+/* Direction: radio buttons drawn as a segmented control. */
+.fc-segment {
+  display: flex;
+  border: 1px solid var(--ink-12);
+  border-radius: 2px;
+}
+
+.fc-segment label {
+  position: relative;
+  flex: 1 1 0;
+  cursor: pointer;
+}
+
+.fc-segment label + label {
+  border-left: 1px solid var(--ink-12);
+}
+
+.fc-segment input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fc-segment span {
+  display: grid;
+  place-items: center;
+  min-height: 2.6rem;
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-55);
+  white-space: nowrap;
+}
+
+.fc-segment input:checked + span {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.fc-segment input:focus-visible + span {
+  outline: 2px solid var(--polemonium);
+  outline-offset: 2px;
+}
+
+/* The card itself. */
+.fc-card {
+  margin-top: 1.5rem;
+  padding: 1.35rem 1.5rem 1.5rem;
+  border: 1px solid var(--ink-12);
+  border-radius: 2px;
+}
+
+.fc-card__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-55);
+}
+
+.fc-card__prompt {
+  margin: 0.9rem 0 1.1rem;
+  font-size: clamp(1.75rem, 1rem + 3vw, 2.3rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+/* 1.2rem keeps the text above 16px, below which iOS zooms in on focus. */
+.fc-card__input {
+  display: block;
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--ink-40);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 150ms ease;
+}
+
+.fc-card__input::placeholder {
+  color: var(--ink-40);
+}
+
+.fc-card__input:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+
+.fc-card.is-right .fc-card__input {
+  border-color: var(--polemonium);
+  box-shadow: inset 0 0 0 1px var(--polemonium);
+}
+
+.fc-card.is-wrong .fc-card__input {
+  border-color: var(--range-of-light);
+  box-shadow: inset 0 0 0 1px var(--range-of-light);
+  color: var(--ink-55);
+  text-decoration: line-through;
+  text-decoration-color: var(--range-of-light);
+}
+
+/* Reserved height, so the buttons do not jump when feedback appears. */
+.fc-card__feedback {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 0.7rem;
+  min-height: 2.5rem;
+  margin: 0.55rem 0 0.6rem;
+  padding: 0.3rem 0 0.3rem 0.9rem;
+  border-left: 2px solid transparent;
+  line-height: 1.4;
+}
+
+.fc-card__feedback.is-right {
+  border-left-color: var(--polemonium);
+  color: var(--polemonium);
+  font-weight: 600;
+}
+
+.fc-card__feedback.is-wrong {
+  border-left-color: var(--range-of-light);
+}
+
+.fc-card__feedback.is-wrong strong {
+  font-size: 1.2rem;
+}
+
+.fc-card__feedback.is-note {
+  border-left-color: var(--ink-12);
+  font-size: 0.85rem;
+  color: var(--ink-55);
+}
+
+.fc-card__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-55);
+}
+
+.fc-card__actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.fc-btn {
+  flex: 1 1 0;
+  min-height: 2.9rem;
+  padding: 0 1rem;
+  border: 1px solid var(--ink-12);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color 150ms ease;
+}
+
+.fc-btn:hover {
+  border-color: var(--ink);
+}
+
+.fc-btn--primary {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.fc-card.is-right .fc-btn:not(.fc-btn--primary) {
+  visibility: hidden;
+}
+
+.fc-empty {
+  margin: 1.5rem 0 0;
+  color: var(--ink-55);
+}
+
+.fc-progress {
+  margin-top: 1.1rem;
+}
+
+.fc-progress__track {
+  height: 2px;
+  background: var(--ink-12);
+  overflow: hidden;
+}
+
+.fc-progress__fill {
+  display: block;
+  height: 100%;
+  background: var(--polemonium);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms ease;
+}
+
+.fc-progress__text {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-55);
+}
+
+@media (max-width: 30rem) {
+  .fc {
+    margin-top: 1.5rem;
+  }
+
+  .fc-card {
+    margin-top: 1.1rem;
+    padding: 1.1rem 1.1rem 1.2rem;
+  }
+
+  .fc-card__prompt {
+    margin: 0.7rem 0 0.9rem;
+  }
+
+  .fc-btn {
+    padding: 0 0.5rem;
+    letter-spacing: 0.06em;
+  }
 }
 
 /* ------------------------------------------------------------------ footer */

@@ -110,6 +110,28 @@ posts. There is no per-page nav to keep in sync.
 Post bodies are the one place you write HTML, because prose with code samples,
 diagrams, and equations does not fit neatly into YAML.
 
+### Add Dutch flashcards
+
+Each set is a CSV file in `content/flashcards/`, one card per line, Dutch first:
+
+```
+de kat,cat
+goedemorgen,good morning
+```
+
+1. Add lines to an existing set, or create `content/flashcards/<set_name>.csv`
+   for a new one. The file name becomes the set's name on the page
+   (`food_and_drink.csv` shows as "Food and drink").
+2. `./build.py`
+
+Blank lines and lines starting with `#` are skipped. If a side contains a comma,
+wrap it in double quotes: `"ja, hoor",sure`. `build.py` names the file and line
+of any card it cannot read.
+
+On the page, an answer counts if it matches the card once both are trimmed and
+lowercased. Which sets are included and the direction (Dutch → English, English
+→ Dutch, or mixed) are remembered in the browser's `localStorage`.
+
 ### Move or rename a page
 
 Add the old address to `redirects` in `content/site.yaml` so existing links keep
@@ -171,6 +193,8 @@ content/                 EVERYTHING YOU EDIT
   photos.yaml            the photography page
   posts.yaml             blog post list
   posts/*.html           blog post bodies
+  flashcards.yaml        the flashcards page
+  flashcards/*.csv       flashcard sets, one "dutch,english" card per line
 
 build.py                 content/ -> HTML. Run after every edit.
 check.py                 pre-push sanity check
@@ -180,11 +204,13 @@ bootstrap.sh             one-time setup after cloning
 index.html               generated
 photography/index.html   generated
 blog/                    generated
+flashcards/index.html    generated, with every card set embedded
 404.html, sitemap.xml    generated
 gallery.html, blog.html  generated redirect stubs
 
 assets/css/site.css      the entire design system, hand-maintained
 assets/js/lightbox.js    click-to-enlarge for the gallery
+assets/js/flashcards.js  the flashcard drill
 assets/js/math.js        LaTeX rendering
 assets/vendor/katex/     committed copy of KaTeX 0.18.4
 assets/gallery/          photographs
