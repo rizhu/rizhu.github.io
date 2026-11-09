@@ -115,7 +115,11 @@ sections:
         I love backpacking, mountaineering, and the outdoors! Here are some
         selected adventures.
     trips:
-      - what: Brooks Range custom route (7 days)
+      - what: The Maze (via packraft from The Needles)
+        where: Canyonlands National Park, UT
+        party: solo
+
+      - what: Brooks Range custom route
         where: Gates of the Arctic National Park and Preserve, AK
         party: solo
 
